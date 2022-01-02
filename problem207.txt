@@ -1,0 +1,66 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        boolean [] visited = new boolean[numCourses];
+        
+        for(int i = 0; i < numCourses; i ++){
+            visited[i] = false;
+        }
+        
+        boolean [] visitedTemp = visited.clone();
+             
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        
+        // adding a new arraylist into the arraylist, where the index is the course id
+        for(int i = 0; i < numCourses; i ++){
+            graph.add(new ArrayList<Integer>());
+        }
+        
+        // adding list of children
+        for(int[] prereq: prerequisites){
+            graph.get(prereq[1]).add(prereq[0]);
+
+        }
+        
+        
+        for(int i = 0; i < numCourses; i ++){
+            if(hasCycle(visitedTemp, i, graph, i, false)){
+                
+                return false;
+            }
+            
+            visitedTemp = visited.clone();
+            
+        }
+        
+        return true;
+    }
+    
+    // repeat checks if the current checking node is being traversed again,
+    // notFirstTime ensures that it is not the first time visiting
+    public boolean hasCycle(boolean[] visited, int currentNode, ArrayList<ArrayList<Integer>> graph, int repeat, boolean notFirstTime ){
+    
+        
+        if(currentNode == repeat && notFirstTime){
+            return true;
+        }
+        
+        
+        
+        //too much effort to check for repeated nodes, just ignore first,
+        // cycled nodes will be visited from the above for loop eventually
+        if(visited[currentNode]){
+            return false;
+        }
+        
+        visited[currentNode] = true;
+        
+        for (int i = 0; i < graph.get(currentNode).size(); i++){
+            if(hasCycle(visited, graph.get(currentNode).get(i), graph, repeat, true)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}

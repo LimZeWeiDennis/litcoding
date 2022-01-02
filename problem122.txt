@@ -1,0 +1,44 @@
+// find all the peaks and the dips
+// add up all the differences
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        int currPeak = prices[prices.length - 1];
+        
+        int profits = 0;
+        
+        boolean notSold = true;
+        
+        for (int i = prices.length - 2; i >= 1; i --){
+            
+            //checking if the current price is a peak
+            if(prices[i] >= prices[i + 1] && prices[i] >= prices[i - 1]){
+                currPeak = prices[i];
+                
+                notSold = true;
+            }
+            
+            //checking if the current price is a dip
+            if(prices[i] <= prices[i + 1] && prices[i] <= prices[i - 1] && notSold){
+                
+                // add the difference of the peak to the prices
+                profits += currPeak - prices[i];
+                
+                notSold = false;
+            }
+            
+        }
+        
+
+        //checking if price of the first day is a dip
+        if(prices.length > 1 && prices[0] < prices[1]){
+
+        // add the difference of the peak to the prices
+            profits += currPeak - prices[0];
+        }
+        
+        
+        return profits;
+    }
+}

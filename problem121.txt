@@ -1,0 +1,55 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        
+        int currentLargest = prices[prices.length - 1];
+        
+        ArrayList<Integer> profits = new ArrayList<>();
+        
+        for (int i = prices.length - 1; i >= 0; i --){
+            profits.add(currentLargest - prices[i]);
+            
+            if (prices[i] > currentLargest){
+                currentLargest = prices[i];
+            }
+        }
+        
+        Integer max = Collections.max(profits);
+        
+        if(max > 0){
+            return max;
+        }
+        
+        return 0;
+        
+    }
+
+    
+    // faster solution
+    public int maxProfit(int[] prices) {
+        
+        int currentLargest = prices[prices.length - 1];
+        
+        int largestSellPrice = 0;
+        
+        for (int i = prices.length - 1; i >= 0; i --){
+            int diff = currentLargest - prices[i];
+            
+            if(largestSellPrice < diff){
+                largestSellPrice = diff;
+            }
+            
+            if (prices[i] > currentLargest){
+                currentLargest = prices[i];
+            }
+        }
+        
+        
+        if(largestSellPrice > 0){
+            return largestSellPrice;
+        }
+        
+        return 0;
+        
+    }
+}

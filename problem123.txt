@@ -1,0 +1,104 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        int profit = 0;
+        
+        if(prices.length < 2){
+            return profit;
+        }
+        
+        
+        if(prices[0] < prices[1]){
+            profit = recursiveHelper(0, prices);
+        }
+        
+        
+        for(int i = 1; i < prices.length - 1; i ++){
+            
+
+            
+            // if is a dip.. to check for first buy
+            if(prices[i] <= prices[i - 1] && prices[i] <= prices[i + 1]){
+                profit = Math.max(profit, recursiveHelper(i, prices));
+            }
+            
+        }
+        
+        
+        return profit;
+    }
+
+    
+    public int recursiveHelper(int currentIndex, int[] prices){
+        
+        int profit = 0;
+        
+        //starting for the index after the currentIndex
+        for (int i = currentIndex + 1; i < prices.length - 1;i ++){
+            
+            //if currentprice is a peak, check sell
+            if(prices[i] >= prices[i-1] && prices[i] >= prices[i + 1]){
+                profit = Math.max(profit, prices[i] - prices[currentIndex] + findBestSecondTransaction(i, prices));
+            }
+        }
+        
+        profit = Math.max(profit, prices[prices.length - 1] - prices[currentIndex] );
+        
+        
+        return profit;
+        
+        
+    }
+    
+        
+    public int findBestSecondTransaction(int currentIndex, int[] prices){
+        int largest = prices[prices.length - 1];
+        
+        int profit = 0;
+        
+        for (int i = prices.length - 2; i > currentIndex; i --){
+            if(largest - prices[i] > profit){
+                profit = largest - prices[i];
+            }
+            
+            if(prices[i] > largest){
+                largest = prices[i];
+            }
+        }
+        
+        return profit;
+    }
+}
+
+
+Class Solution {
+    public int maxProfit(int[] prices) { 
+
+        int firstBuy, secondBuy = Integer.MIN_VALUE, Integer.MIN_VALUE;
+
+        int firstSell, secondSell = 0, 0;
+
+        for (int i = 0; i < prices.length; i ++){
+
+            // first buy should be the max of either first buy or negative of prices[i]
+            // -prices[i] as that is the amount you spent buying 
+            firstBuy = Math.max(firstBuy, -prices[i]);
+
+            // first sell is the price of selling what you bought first
+            // therefore you gain the prices[i], since you sold at that price 
+            firstSell = Math.max(firstSell, firstBuy + prices[i]);
+
+            // first buy should be the max of either first buy or negative of prices[i]
+            // -prices[i] as that is the amount you spent buying 
+            secondBuy= Math.max(secondBuy, firstSell - prices[i]);
+
+            // first buy should be the max of either first buy or negative of prices[i]
+            // -prices[i] as that is the amount you spent buying 
+            secondSell= Math.max(secondSell, secondBuy + prices[i]);
+        }
+
+        return secondSell;
+
+    }
+
+}

@@ -1,0 +1,110 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int minDepth(TreeNode root) {
+        
+        Stack<TreeNode> toVisit = new Stack<>();
+        Stack<TreeNode> toVisitNext = new Stack<>();
+        
+        if(root == null){
+            return 0;
+        }
+        
+        if(root.left == null && root.right == null){
+            return 1;
+            
+        } else if (root.left == null){
+            
+            toVisit.push(root.right);
+            
+        } else if (root.right == null) {
+            
+            toVisit.push(root.left);
+            
+        } else {
+            
+            toVisit.push(root.right);
+            toVisit.push(root.left);
+        }
+        
+        
+        return BFS(toVisit, toVisitNext, 1);
+    }
+    
+    public int BFS(Stack<TreeNode> toVisit, Stack<TreeNode> toVisitNext , int currentDepth){
+        
+        
+        while(!toVisit.empty() || !toVisitNext.empty()){
+            
+            while(!toVisit.empty()){
+                
+                TreeNode visitNext = toVisit.pop();
+                
+                System.out.println(visitNext.val);
+                
+                if(visitNext.left == null && visitNext.right == null){
+                    currentDepth ++;
+                    return currentDepth;
+                    
+                } else if(visitNext.left == null){
+                    
+                    toVisitNext.push(visitNext.right);
+                    
+                } else if(visitNext.right == null){
+                    
+                    toVisitNext.push(visitNext.left);
+                    
+                } else {
+                    
+                    toVisitNext.push(visitNext.left);
+                    toVisitNext.push(visitNext.right);
+                }
+            }
+            
+            currentDepth ++;
+            
+            
+            while(!toVisitNext.empty()){
+                
+                TreeNode visitNext = toVisitNext.pop();
+                
+                if(visitNext.left == null && visitNext.right == null){
+                    
+                    currentDepth ++; 
+                    return currentDepth;
+                    
+                } else if(visitNext.left == null){
+                    
+                    toVisit.push(visitNext.right);
+                    
+                } else if(visitNext.right == null){
+                    
+                    toVisit.push(visitNext.left);
+                    
+                } else {
+                    
+                    toVisit.push(visitNext.left);
+                    toVisit.push(visitNext.right);
+                }
+            }
+            
+            currentDepth ++;
+        }
+        
+        return currentDepth;
+
+    }
+}

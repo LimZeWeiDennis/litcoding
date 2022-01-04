@@ -1,0 +1,35 @@
+class Solution {
+    public int getMaximumGenerated(int n) {
+        int[] memo = new int[n + 1];
+        
+        if(n == 0){
+            return 0;
+        }
+        
+        if(n == 1){
+            return 1;
+        }
+        
+        memo[0] = 0;
+        memo[1] = 1;
+        
+        int max = 1;
+        
+        for (int i = 2; i <= n; i++){
+            if(i % 2 == 0){
+                memo[i] = memo[i/2];
+            } else {
+                memo[i] = memo[i/2] + memo [i/2 + 1];
+            }
+            
+            if(memo[i] > max){
+                max = memo[i];
+            }
+        }
+        
+        
+        return max;
+    }
+    
+
+}

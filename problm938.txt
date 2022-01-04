@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        int sum = 0;
+        if(root.val >= low && root.val <= high) {
+            
+            sum += helper(root.left, low, high, sum) + helper(root.right, low ,high, sum);
+            sum += root.val;
+            
+        } else if(root.val < low){
+            sum += helper(root.right ,low , high, sum);
+        } else if(root.val > high){
+            sum += helper ( root.left, low, high, sum);
+        }
+        
+        return sum;
+        
+        
+    }
+    
+    public int helper(TreeNode currentNode, int low, int high, int sum){
+
+        
+        if(currentNode.left == null && currentNode.right == null){
+            sum +=  sum;
+        } else if(currentNode.left == null){
+            sum +=  helper(currentNode.right, low, high, sum);
+        } else if(currentNode.right == null){
+            sum +=  helper(currentNode.left, low, high, sum);
+        } else {
+            sum += helper(currentNode.left, low, high, sum) + helper(currentNode.right, low, high, sum);
+        }
+        
+        if(currentNode.val >= low && currentNode.val <= high){
+            
+            sum += currentNode.val;
+        }
+        
+        return sum;
+    }
+}
